@@ -5,8 +5,8 @@ require('dotenv').config();
 const PORT = process.env.PORT || '3001';
 const USER_NAME = process.env.USER_NAME;
 const PASS = process.env.PASS;
-
 const app = express();
+const server = require('http').createServer(app);
 
 app.listen(PORT);
 
@@ -24,7 +24,7 @@ mongoose.connect(
   }
 );
 
-const io = require('socket.io')(PORT, {
+const io = require('socket.io')(server, {
   cors: {
     origin: '*',
     methods: ['GET', 'POST'],
