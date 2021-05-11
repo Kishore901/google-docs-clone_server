@@ -2,20 +2,11 @@ const mongoose = require('mongoose');
 const Document = require('./models/Document');
 const express = require('express');
 require('dotenv').config();
-const cors = require('cors');
 const PORT = process.env.PORT || '3001';
 const USER_NAME = process.env.USER_NAME;
 const PASS = process.env.PASS;
 const app = express();
 const server = require('http').createServer(app);
-
-app.use(cors());
-
-app.listen(PORT);
-
-app.get('/', (req, res) => {
-  res.send("I'm working");
-});
 
 mongoose.connect(
   `mongodb+srv://${USER_NAME}:${PASS}@cluster0.y29is.mongodb.net/Cluster0?retryWrites=true&w=majority`,
@@ -34,9 +25,18 @@ const io = require('socket.io')(server, {
   },
 });
 
+server.listen(PORT, () => {
+  console.log('server running at 3001');
+});
+
+app.get('/', (req, res) => {
+  res.send("I'm working");
+});
+
 const defaultValue = '';
 
 io.on('connection', (socket) => {
+  console.log('Client connected');
   socket.on('get-document', async (documentId) => {
     const document = await findOrCreateDocument(documentId);
     socket.join(documentId);
