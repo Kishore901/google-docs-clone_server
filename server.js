@@ -6,7 +6,7 @@ const USER_NAME = process.env.USER_NAME;
 const PASS = process.env.PASS;
 
 mongoose.connect(
-  `mongodb+srv://${USER_NAME}:${PASS}@cluster0.y29is.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`,
+  `mongodb+srv://${USER_NAME}:${PASS}@cluster0.y29is.mongodb.net/Cluster0?retryWrites=true&w=majority`,
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,
