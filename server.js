@@ -12,47 +12,47 @@ app.listen(PORT);
 
 app.get('/', (req, res) => {
   res.send("I'm working");
-  mongoose.connect(
-    `mongodb+srv://${USER_NAME}:${PASS}@cluster0.y29is.mongodb.net/Cluster0?retryWrites=true&w=majority`,
-    {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      useFindAndModify: false,
-      useCreateIndex: true,
-    }
-  );
+});
+mongoose.connect(
+  `mongodb+srv://${USER_NAME}:${PASS}@cluster0.y29is.mongodb.net/Cluster0?retryWrites=true&w=majority`,
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false,
+    useCreateIndex: true,
+  }
+);
 
-  const io = require('socket.io')(server, {
-    cors: {
-      origin: '*',
-      methods: ['GET', 'POST'],
-    },
-  });
+const io = require('socket.io')(server, {
+  cors: {
+    origin: '*',
+    methods: ['GET', 'POST'],
+  },
+});
 
-  const defaultValue = '';
+const defaultValue = '';
 
-  io.on('connection', (socket) => {
-    socket.on('get-document', async (documentId) => {
-      const document = await findOrCreateDocument(documentId);
-      socket.join(documentId);
-      socket.emit('load-document', document.data);
+io.on('connection', (socket) => {
+  socket.on('get-document', async (documentId) => {
+    const document = await findOrCreateDocument(documentId);
+    socket.join(documentId);
+    socket.emit('load-document', document.data);
 
-      socket.on('send-changes', (delta) => {
-        socket.broadcast.to(documentId).emit('receive-changes', delta);
-      });
+    socket.on('send-changes', (delta) => {
+      socket.broadcast.to(documentId).emit('receive-changes', delta);
+    });
 
-      socket.on('save-doc', async (data) => {
-        await Document.findByIdAndUpdate(documentId, { data });
-      });
+    socket.on('save-doc', async (data) => {
+      await Document.findByIdAndUpdate(documentId, { data });
     });
   });
-
-  const findOrCreateDocument = async (id) => {
-    if (id == null) return;
-
-    const document = await Document.findById(id);
-    if (document) return document;
-
-    return await Document.create({ _id: id, data: defaultValue });
-  };
 });
+
+const findOrCreateDocument = async (id) => {
+  if (id == null) return;
+
+  const document = await Document.findById(id);
+  if (document) return document;
+
+  return await Document.create({ _id: id, data: defaultValue });
+};
