@@ -17,7 +17,7 @@ mongoose.connect(
 
 const io = require('socket.io')(PORT, {
   cors: {
-    origin: 'http://localhost:3000',
+    origin: 'https://google-docs-clone-client.vercel.app/',
     methods: ['GET', 'POST'],
   },
 });
