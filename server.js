@@ -8,6 +8,12 @@ const PASS = process.env.PASS;
 
 const app = express();
 
+app.listen(PORT);
+
+app.get('/', (req, res) => {
+  res.send("I'm working");
+});
+
 mongoose.connect(
   `mongodb+srv://${USER_NAME}:${PASS}@cluster0.y29is.mongodb.net/Cluster0?retryWrites=true&w=majority`,
   {
@@ -17,11 +23,6 @@ mongoose.connect(
     useCreateIndex: true,
   }
 );
-app.listen(PORT);
-
-app.get('/', (req, res) => {
-  res.send("I'm working");
-});
 
 const io = require('socket.io')(PORT, {
   cors: {
