@@ -1,9 +1,12 @@
 const mongoose = require('mongoose');
 const Document = require('./models/Document');
+const express = require('express');
 require('dotenv').config();
 const PORT = process.env.PORT || 3001;
 const USER_NAME = process.env.USER_NAME;
 const PASS = process.env.PASS;
+
+const app = express();
 
 mongoose.connect(
   `mongodb+srv://${USER_NAME}:${PASS}@cluster0.y29is.mongodb.net/Cluster0?retryWrites=true&w=majority`,
@@ -14,6 +17,11 @@ mongoose.connect(
     useCreateIndex: true,
   }
 );
+app.listen(PORT);
+
+app.get('/', (req, res) => {
+  res.send("I'm working");
+});
 
 const io = require('socket.io')(PORT, {
   cors: {
