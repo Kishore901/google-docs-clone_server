@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Document = require('./models/Document');
 const express = require('express');
 require('dotenv').config();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || '3001';
 const USER_NAME = process.env.USER_NAME;
 const PASS = process.env.PASS;
 
